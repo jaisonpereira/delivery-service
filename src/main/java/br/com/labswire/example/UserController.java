@@ -31,6 +31,7 @@ public class UserController {
 	}
 
 	// UTILIZANDO DELETE
+	// alterar para ler somente o id
 	@RequestMapping(value = "/user/excluir", method = RequestMethod.DELETE)
 	public String excluirUser(@RequestBody User user) {
 		try {
