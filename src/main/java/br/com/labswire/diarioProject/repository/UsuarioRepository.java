@@ -18,4 +18,6 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
 
 	public List<Usuario> findByNomeLikeIgnoreCase(String nome);
 
+	public Usuario findByNome(String nome);
+
 }
