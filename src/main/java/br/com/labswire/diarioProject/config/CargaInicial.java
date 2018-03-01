@@ -2,10 +2,9 @@ package br.com.labswire.diarioProject.config;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Component;
 
 import br.com.labswire.diarioProject.entity.Aluno;
 import br.com.labswire.diarioProject.entity.Modulo;
-import br.com.labswire.diarioProject.repository.AlunoRepository;
-import br.com.labswire.diarioProject.repository.DiarioRepository;
-import br.com.labswire.diarioProject.repository.ModuloRepository;
+import br.com.labswire.diarioProject.entity.Usuario;
+import br.com.labswire.diarioProject.repository.PerfilRepository;
+import br.com.labswire.diarioProject.repository.UsuarioRepository;
+import br.com.labswire.security.Perfil;
 
 /**
  * @author jpereira
@@ -28,37 +28,25 @@ import br.com.labswire.diarioProject.repository.ModuloRepository;
 public class CargaInicial implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
-	AlunoRepository alunoRepository;
+	UsuarioRepository usuarioRepository;
 
 	@Autowired
-	ModuloRepository moduloRepository;
+	PerfilRepository perfilRepository;
 
-	@Autowired
-	DiarioRepository diarioRepository;
-
-	// metodo chamado no momento de refresh do contexto
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent e) {
+		List<Perfil> perfis = perfilRepository.findAll();
 
-		List<Aluno> alunos = alunoRepository.findAll();
+		if (perfis.isEmpty()) {
+			perfilRepository.save(new Perfil("ROLE_ADMIN"));
 
-		if (alunos.size() == 0) {
-			try {
-				this.criarAluno("Jaison", "1991-04-10");
-				this.criarAluno("Roberto", "1991-04-10");
-				this.criarAluno("Paulo", "1991-04-10");
-				this.criarAluno("João", "1991-04-10");
-				this.criarAluno("Rosana", "1991-04-10");
-			} catch (ParseException ex) {
-				Logger.getLogger(CargaInicial.class.getName()).log(Level.SEVERE, null, ex);
-			}
-		}
+			Perfil perfil = perfilRepository.findByNome("ROLE_ADMIN");
 
-		List<Modulo> modulos = moduloRepository.findAll();
+			List<Perfil> perfisUsuario = new ArrayList<>();
 
-		if (modulos.size() == 0) {
-			this.criarModulo("Modulo 1");
-			this.criarModulo("Modulo 2");
+			perfisUsuario.add(perfil);
+
+			usuarioRepository.save(new Usuario("admin", perfisUsuario, "123"));
 		}
 
 	}
@@ -68,7 +56,6 @@ public class CargaInicial implements ApplicationListener<ContextRefreshedEvent> 
 
 		modulo.setNome(nome);
 
-		moduloRepository.save(modulo);
 	}
 
 	private void criarAluno(String nome, String dataNascimento) throws ParseException {
@@ -77,8 +64,6 @@ public class CargaInicial implements ApplicationListener<ContextRefreshedEvent> 
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		Date data = formato.parse(dataNascimento);
 		aluno.setDtNascimento(data);
-
-		alunoRepository.save(aluno);
 
 	}
 

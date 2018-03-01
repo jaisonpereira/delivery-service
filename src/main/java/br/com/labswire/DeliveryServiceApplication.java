@@ -4,9 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
-@EnableMongoAuditing
+//@EnableMongoAuditing
+/**
+ * Classe inicial do Spring Mongo Auditoria desabilitada
+ * 
+ * @author jpereira
+ *
+ */
 @SpringBootApplication
 public class DeliveryServiceApplication extends SpringBootServletInitializer {
 
