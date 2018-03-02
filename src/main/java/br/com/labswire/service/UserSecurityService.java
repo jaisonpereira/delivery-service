@@ -20,12 +20,12 @@ public class UserSecurityService implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	// podemos autenticar por email - cpf e etc
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		Usuario usuario = usuarioRepository.findByNome(userName);
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Usuario usuario = usuarioRepository.findByNome(username);
+
 		if (usuario == null) {
-			throw new UsernameNotFoundException("User ou Senha inválida");
+			throw new UsernameNotFoundException("Usuaŕio ou senha inválidos");
 		}
 
 		return new UserSecurityDetails(usuario);

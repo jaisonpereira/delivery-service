@@ -21,27 +21,23 @@ import br.com.labswire.service.UserSecurityService;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private UserSecurityService userSecurityDetailService;
+	private UserSecurityService userDetailService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userSecurityDetailService);
-	}
-
-	/**
-	 * Ignoramos protocolos e podemos deixar passar
-	 * 
-	 * deixamos os endpoints como public aberto
-	 */
-	@Override
-	public void configure(WebSecurity webSecurity) throws Exception {
-		webSecurity.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").antMatchers(HttpMethod.GET, "/public/**");
+		authenticationManagerBuilder.userDetailsService(userDetailService);
 	}
 
 	@Bean
 	@Override
-	public AuthenticationManager authenticationManager() throws Exception {
+	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
+	}
+
+	@Override
+	public void configure(WebSecurity security) throws Exception {
+
+		security.ignoring().antMatchers(HttpMethod.OPTIONS, "/**").antMatchers(HttpMethod.GET, "/public/**");
 	}
 
 }
