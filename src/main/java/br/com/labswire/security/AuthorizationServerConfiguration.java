@@ -48,8 +48,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	 */
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient("mobile").authorizedGrantTypes("password", "authorization_code", "refresh_token")
-				.scopes("bar", "read", "write").refreshTokenValiditySeconds(20000).accessTokenValiditySeconds(20000)
-				.resourceIds("restservice").secret("123");
+				.scopes("bar", "read", "write").refreshTokenValiditySeconds(2592000)
+				.accessTokenValiditySeconds(200000988).resourceIds("restservice").secret("123");
 	}
 
 	@Bean
