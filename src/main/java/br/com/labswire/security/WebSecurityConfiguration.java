@@ -11,7 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import br.com.labswire.service.UserSecurityService;
-
+//http://localhost:8080/service/oauth/token?grant_type=password&username=admin&password=123   post WITH BASIC AUTHORIZATION
+//http://localhost:8080/service/usuario BEARER + HASH
 /**
  * @author jpereira
  *
