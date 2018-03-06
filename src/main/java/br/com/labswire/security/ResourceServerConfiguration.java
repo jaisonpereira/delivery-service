@@ -20,6 +20,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 		resource.resourceId("restservice");
 	}
 
+	/**
+	 * negando qualquer requisicao que nao estiver logada
+	 */
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.logout().invalidateHttpSession(true).clearAuthentication(true).and().authorizeRequests()

@@ -30,7 +30,6 @@ public class DeliveryServiceApplication extends SpringBootServletInitializer {
 
 	@Bean
 	public CorsFilter corsFilter() {
-
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
