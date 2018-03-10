@@ -1,22 +1,19 @@
 package br.com.labswire.diarioProject.config;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import br.com.labswire.diarioProject.entity.Aluno;
 import br.com.labswire.diarioProject.entity.Modulo;
+import br.com.labswire.diarioProject.entity.Pedido;
 import br.com.labswire.diarioProject.entity.Usuario;
-import br.com.labswire.diarioProject.repository.PerfilRepository;
+import br.com.labswire.diarioProject.repository.ModuloRepository;
+import br.com.labswire.diarioProject.repository.PedidoRepository;
 import br.com.labswire.diarioProject.repository.UsuarioRepository;
-import br.com.labswire.security.Perfil;
 
 /**
  * @author jpereira
@@ -28,43 +25,57 @@ import br.com.labswire.security.Perfil;
 public class CargaInicial implements ApplicationListener<ContextRefreshedEvent> {
 
 	@Autowired
+	BCryptPasswordEncoder encoder;
+
+	@Autowired
 	UsuarioRepository usuarioRepository;
 
 	@Autowired
-	PerfilRepository perfilRepository;
+	PedidoRepository pedidoRepository;
+
+	@Autowired
+	ModuloRepository moduloRepository;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent e) {
-		List<Perfil> perfis = perfilRepository.findAll();
+		usuarioRepository.deleteAll();
+		moduloRepository.deleteAll();
+		pedidoRepository.deleteAll();
 
-		if (perfis.isEmpty()) {
-			perfilRepository.save(new Perfil("ROLE_ADMIN"));
+		List<Usuario> usuarios = usuarioRepository.findAll();
+		if (usuarios.isEmpty()) {
+			Usuario adminUser = new Usuario("admin", encoder.encode("123"));
+			adminUser.addPerfil(br.com.labswire.enums.Perfil.ADMIN);
+			usuarioRepository.save(adminUser);
+			Usuario cliente = new Usuario("cliente", encoder.encode("123"));
+			usuarioRepository.save(cliente);
 
-			Perfil perfil = perfilRepository.findByNome("ROLE_ADMIN");
+			Pedido pedido1 = new Pedido("teste1");
+			pedido1.setUsuario(cliente);
+			pedidoRepository.save(pedido1);
 
-			List<Perfil> perfisUsuario = new ArrayList<>();
+			Pedido pedido2 = new Pedido("teste2");
+			pedido1.setUsuario(adminUser);
+			pedidoRepository.save(pedido2);
 
-			perfisUsuario.add(perfil);
+		}
 
-			usuarioRepository.save(new Usuario("admin", perfisUsuario, "123"));
+		for (int i = 0; i < 8; i++) {
+			Modulo modulo = new Modulo();
+			modulo.setNome("teste" + i);
+			moduloRepository.save(modulo);
 		}
 
 	}
 
-	private void criarModulo(String nome) {
-		Modulo modulo = new Modulo();
-
-		modulo.setNome(nome);
-
-	}
-
-	private void criarAluno(String nome, String dataNascimento) throws ParseException {
-		Aluno aluno = new Aluno();
-		aluno.setNome(nome);
-		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-		Date data = formato.parse(dataNascimento);
-		aluno.setDtNascimento(data);
-
-	}
+	// private void criarAluno(String nome, String dataNascimento) throws
+	// ParseException {
+	// Aluno aluno = new Aluno();
+	// aluno.setNome(nome);
+	// SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+	// Date data = formato.parse(dataNascimento);
+	// aluno.setDtNascimento(data);
+	//
+	// }
 
 }

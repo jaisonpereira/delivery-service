@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +35,13 @@ public class UsuarioController {
 		return repository.findAll();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/usuario/{nome}/like", method = RequestMethod.GET)
 	public List<Usuario> listLike(@PathVariable String nome) {
 		return repository.findByNomeLikeIgnoreCase(nome);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/usuario/{nome}/full-text-search", method = RequestMethod.GET)
 	public List<Usuario> listFullText(@PathVariable String nome) {
 		Pageable pages = new PageRequest(0, 10, new Sort(new Order(ASC, "score")));
@@ -58,6 +61,7 @@ public class UsuarioController {
 		return repository.save(usuario);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/usuario/{id}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable String id) {
 		repository.delete(id);
