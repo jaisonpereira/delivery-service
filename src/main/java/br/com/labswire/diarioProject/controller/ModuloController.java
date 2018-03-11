@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.labswire.diarioProject.entity.Modulo;
 import br.com.labswire.diarioProject.repository.ModuloRepository;
+import br.com.labswire.exception.DataIntegrityException;
 
 /**
  * @author jpereira
@@ -36,6 +37,10 @@ public class ModuloController {
 
 	@RequestMapping(value = "/modulo", method = RequestMethod.PUT)
 	public Modulo edit(@RequestBody Modulo modulo) {
+		if (!modulo.getId().equals("44")) {
+			throw new DataIntegrityException("modulo nao permitido");
+		}
+
 		return repository.save(modulo);
 	}
 

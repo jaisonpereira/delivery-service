@@ -36,7 +36,7 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	/**
 	 * Urls Publicas /restaurantes cadastros e etc
 	 */
-	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
+	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**", "/modulo/**" };
 	// nao exige login para ser acessado vamos implantar restaurantes
 	private static final String[] PUBLIC_MATCHERS_GET = { "/usuario/**" };
 
@@ -69,7 +69,9 @@ public class SecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+		corsConfiguration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		source.registerCorsConfiguration("/**", corsConfiguration);
 		return source;
 
 	}

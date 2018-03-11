@@ -14,14 +14,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import io.undertow.security.api.SecurityContext;
-
 /**
  * @author jpereira filtro do spring de AUTENTICACAO
  */
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	private JWTUtil jwtUtil;
-	private AuthenticationManager authenticationManager;
+//	private AuthenticationManager authenticationManager;
 	private UserDetailsService userDetailsService;
 
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
